@@ -1,0 +1,15 @@
+
+.custom-department-header{
+    background-color: var(--secondary-bg);
+    color: var(--secondary-color); 
+}
+
+.custom-depatment-header-adddepartment{
+    background-color: var(--primary-bg);
+    color: var(--primary-color);
+}
+
+.custom-department-ul-list{
+    list-style: none;
+    background-color: var(--primary-shadow);
+}

@@ -1,0 +1,17 @@
+.custom-header-container {
+    background-color: var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 2px 2px 5px var(--primary-shadow);
+}
+
+.custom-header-heading {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.custom-header-logout {
+    text-decoration: none;
+    margin-right: 20px;
+}

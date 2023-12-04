@@ -1,0 +1,14 @@
+.abs-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cur-po {
+    cursor: pointer;
+}
+
+.min-max-h {
+    max-height: 100vh;
+    min-height: 100vh;
+}

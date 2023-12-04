@@ -1,0 +1,18 @@
+.custom-profile-header{
+    background-color: var(--secondary-bg);
+    color: white;
+    height: 3rem;
+}
+.custom-profile-details{
+    background-color: var(--primary-bg);
+}
+
+.custom-profile-update-button{
+    background-color: var(--secondary-color);
+    color: var(--secondary-bg);
+}
+
+.custom-profile-details-body{
+    font-size: large;
+    color: var(--secondary-bg)
+}

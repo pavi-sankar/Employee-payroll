@@ -1,0 +1,47 @@
+/* YourComponent.css */
+.custom-employee-header{
+    background-color: var(--primary-bg);
+    height: 50px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: var(--secondary-color);
+}
+.custom-employee-searchbar {
+    position: relative;
+  }
+  
+  .employee-search-input {
+    width: 350px;
+    padding-left: 5px;
+    padding-right: 2.5rem;
+    border-radius: 5px;
+    border-color: white;
+  }
+  .employee-search-input:hover {
+    border-color: var(--primary-bg)
+  }
+  
+  .custom-employee-search-icon {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem; /* Adjust the right offset based on your icon size */
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--primary-bg);
+  }
+  .custom-employee-dropdown>label {
+    font-size: x-large;
+  }
+  #dropdown{
+    margin: 5px;
+    height: 30px;
+    width: 150px;
+    border-color: white;
+    border-radius: 5px;
+  }
+
+  .custom-employee-addbutton {
+    background-color: white;
+    color: var(--primary-color);
+  }
+  
