@@ -8,7 +8,6 @@
     cursor: pointer;
 }
 
-.min-max-h {
-    max-height: 100vh;
+.min-h {
     min-height: 100vh;
 }

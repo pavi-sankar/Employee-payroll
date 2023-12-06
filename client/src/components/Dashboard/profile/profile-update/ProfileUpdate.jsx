@@ -1,15 +1,25 @@
 import React from 'react'
 import './ProfileUpdate.css'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState,useEffect } from 'react'
+import { useNavigate, } from 'react-router-dom'
+import axios from 'axios'
 
 function ProfileUpdate() {
-    const [username,setUsername] = useState('')
-    const [password,setPassword] = useState('')
+    const [username,setUsername] = useState('');
+    const [password,setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [dob, setDOB] = useState('');
+    const [id,setId] = useState('');
     const navigate = useNavigate()
+
+    useEffect(() => {
+      axios.get(`http://localhost:3000/getprofile/`)
+        .then(response => {
+          setId(response.data[0]._id)
+        })
+        .catch(error => console.error('Error fetching user data:', error));
+    }, []);
 
     const handleSubmit = (e)=>{
         e.preventDefault()
@@ -17,13 +27,22 @@ function ProfileUpdate() {
             alert('Please fill in all fields');
           }
         else{
-            navigate("/home/profile")
             setUsername('')
             setPassword('')
             setFirstName('');
             setLastName('');
             setDOB('');
-            console.log(username ,password ,firstName,lastName ,dob) 
+            axios.put(`http://localhost:3000/updateprofile/${id}`, { username, password, firstName, lastName, dob})
+            .then(result => {
+              console.log(result.data);
+              navigate("/home/profile");
+              window.location.reload();
+              // Provide feedback to the user upon success
+            })
+            .catch(err => {
+              console.error(err);
+              // Provide error handling and feedback to the user
+            });
         }
     }
 

@@ -4,7 +4,7 @@
     height: 50px;
     padding-top: 5px;
     padding-bottom: 5px;
-    color: var(--secondary-color);
+    color: var(--primary-color);
 }
 .custom-employee-searchbar {
     position: relative;
@@ -30,7 +30,7 @@
     color: var(--primary-bg);
   }
   .custom-employee-dropdown>label {
-    font-size: x-large;
+    font-size: large;
   }
   #dropdown{
     margin: 5px;

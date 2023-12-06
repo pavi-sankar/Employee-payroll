@@ -1,0 +1,11 @@
+.custom-add-container-header {
+    background-color: var(--primary-bg);
+}
+
+.custom-add-department-body {
+    background-color: var(--primary-shadow);
+}
+
+#description {
+    height: 130px;
+}

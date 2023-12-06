@@ -9,7 +9,25 @@
     color: var(--primary-color);
 }
 
+.custom-department-ul-head{
+    list-style: none;
+    background-color: var(--primary-color);
+}
+
 .custom-department-ul-list{
     list-style: none;
     background-color: var(--primary-shadow);
+}
+
+.custom-add-dept-edit-btn {
+    background-color: var(--secondary-color);
+}
+
+.custom-add-dept-edit-btn:hover{
+    color: white;
+}
+
+.custom-add-dept-delete-btn{
+    background-color: var(--primary-bg);
+    color: black;
 }

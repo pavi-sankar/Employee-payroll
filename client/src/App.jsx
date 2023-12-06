@@ -10,6 +10,10 @@ import Attendance from './components/Dashboard/attendance/Attendance';
 import Payroll from './components/Dashboard/payroll/Payroll';
 import Profile from './components/Dashboard/profile/Profile';
 import ProfileUpdate from './components/Dashboard/profile/profile-update/ProfileUpdate';
+import AddDepartment from './components/Dashboard/department/add-department/AddDepartment';
+import AddEmployee from './components/Dashboard/employee/add-employee/AddEmployee';
+import EditDept from './components/Dashboard/department/edit-department/EditDept';
+import EditEmployee from './components/Dashboard/employee/edit-employee/EditEmployee';
 
 
 function App() {
@@ -29,6 +33,10 @@ function App() {
             <Route path='/home/profile' element={<Profile />} >
               <Route path='/home/profile/profile-update' element={<ProfileUpdate />} />
             </Route>
+            <Route path='/home/add-department' element={<AddDepartment />} />
+            <Route path='/home/add-employee' element={<AddEmployee />} />
+            <Route path='/home/edit-department/:id' element={<EditDept />} />
+            <Route path='/home/edit-employee/:id' element={<EditEmployee />} />
           </Route>  
         </Routes>
       </BrowserRouter>
