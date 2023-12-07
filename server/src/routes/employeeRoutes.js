@@ -89,6 +89,30 @@ router.put('/putEmployee/:id', async (req, res) => {
     } catch (err) {
         res.json({ error: err.message });
     }
-}); 
+});
+
+//to get no of emp documents
+router.get('/employeeCount', async (req, res) => {
+  try {
+    const employeeCount = await EmpModel.countDocuments();
+    res.json({ count: employeeCount });
+  } catch (error) {
+    console.error('Error getting employee count', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/api/employeeCount/:departmentName', async (req, res) => {
+  const departmentName = req.params.departmentName;
+
+  try {
+    const employeeCount = await EmpModel.countDocuments({ department: departmentName });
+
+    res.json({ count: employeeCount });
+  } catch (error) {
+    console.error('Error getting employee count', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 module.exports = router;

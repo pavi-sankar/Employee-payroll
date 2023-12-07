@@ -58,7 +58,7 @@ function Employee() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className='cur-po'
           >
-            <option value="" disabled hidden>Select...</option>
+            <option value="">Select Department</option>
             {departments.map((dep) => (
               <option key={dep._id} value={dep.depaName}>
                 {dep.depName}

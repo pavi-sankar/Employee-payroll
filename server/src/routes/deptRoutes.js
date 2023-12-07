@@ -1,5 +1,6 @@
 const express = require('express');
 const deptModel = require('../models/Department');
+const EmpModel= require('../models/Emp');
 
 const router = express.Router();
 
@@ -49,17 +50,38 @@ router.get('/getEditDept/:id',(req,res)=>{
 //to update
 router.put('/edit-dept/:id', async (req, res) => {
   const id = req.params.id;
-  try {
-      const updateDept = await deptModel.findByIdAndUpdate(id ,{
-          depName: req.body.depName,
-          depDes: req.body.depDes,
-          designation: req.body.designation
-      }, { new: true });
+  const { depName: newDepName, depDes: newDepDes } = req.body;
 
-      res.json(updateDept);
+  try {
+    // Find and update the department
+    const oldDepartment = await deptModel.findById(id);
+    const oldDepName = oldDepartment.depName;
+
+    const updatedDept = await deptModel.findByIdAndUpdate(id, {
+      depName: newDepName,
+      depDes: newDepDes,
+    }, { new: true });
+
+    // Update the corresponding employees
+    await EmpModel.updateMany({ department: oldDepName }, {
+      $set: { department: newDepName },
+    });
+
+    res.json(updatedDept);
   } catch (err) {
-      res.json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
-}); 
+});
+
+//to get no dept documents
+router.get('/deptCount', async (req, res) => {
+  try {
+    const deptCount = await deptModel.countDocuments();
+    res.json({ count: deptCount });
+  } catch (error) {
+    console.error('Error getting department count', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 module.exports = router;

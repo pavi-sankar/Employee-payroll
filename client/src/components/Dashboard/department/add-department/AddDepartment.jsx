@@ -9,11 +9,10 @@ function AddDepartment() {
 
   const [departmentName, setDepartmentName] = useState('');
   const [description, setDescription] = useState('');
-  const [designation, setDesignation] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!departmentName || !description || !designation) {
+    if (!departmentName || !description ) {
         alert('Please fill in all fields.');
         return;
     }
@@ -21,7 +20,6 @@ function AddDepartment() {
       axios.post(`http://localhost:3000/add-dept`, {
         depName: departmentName,
         depDes: description,
-        designation: designation,
       })
         .then(result => {
           console.log(result.data);
@@ -29,7 +27,6 @@ function AddDepartment() {
           window.location.reload();
           setDepartmentName('');
           setDescription('');
-          setDesignation('');
         })
         .catch(err => {
           console.error(err);
@@ -39,8 +36,7 @@ function AddDepartment() {
 
   const handleClear = () => {
     setDepartmentName('');
-    setDescription('')
-    setDesignation('') 
+    setDescription('');
   };
 
   const handleCancel = () => {
@@ -77,19 +73,6 @@ function AddDepartment() {
                 name="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-            />
-            </div>
-            <div className="mb-5">
-            <label htmlFor="designation" className="form-label">
-                Designations :
-            </label>
-            <input
-                type="text"
-                className="form-control"
-                id="designation"
-                name="designation"
-                value={designation}
-                onChange={(e) => setDesignation(e.target.value)}
             />
             </div>
             <div className='d-flex justify-content-around w-25'>

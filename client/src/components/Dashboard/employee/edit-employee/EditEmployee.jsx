@@ -12,7 +12,9 @@ function EditEmployee() {
   const [jobTitle, setJobTitle] = useState('');
   const [salary, setSalary] = useState('');
   const {id} = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const [departments, setDepartments] = useState([]);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/getEditEmp/${id}`)
@@ -25,6 +27,9 @@ function EditEmployee() {
         setSalary(response.data.salary || '');
       })
       .catch(error => console.error('Error fetching Employee data:', error));
+      axios.get('http://localhost:3000/getDepDetails')
+      .then(response => setDepartments(response.data))
+      .catch(error => console.error('Error fetching departments:', error));
   }, []);
 
   const handleSubmit = (e) => {
@@ -80,19 +85,15 @@ function EditEmployee() {
       <div className="mb-3">
         <label htmlFor="department" className="form-label">Department</label>
         <select className="form-select" id="department" value={department} onChange={(e) => setDepartment(e.target.value)}>
-          <option value="">Select Department</option>
-          <option value="dep1">dep1</option>
-          <option value="dep2">dep2</option>
-        </select>
+            <option value="">Select Department</option>
+            {departments.map(dep => (
+              <option key={dep._id} value={dep.depName}>{dep.depName}</option>
+            ))}
+          </select>
       </div>
       <div className="mb-3">
         <label htmlFor="jobTitle" className="form-label">Job Title</label>
-        <select className="form-select" id="jobTitle" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)}>
-          <option value="">Select Job Title</option>
-          <option value="job1">job1</option>
-          <option value="job2">job2</option>
-          <option value="job3">job3</option>
-        </select>
+        <input type="text" className="form-control" id="jobTitle" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} />
       </div>
       <div className="mb-3">
         <label htmlFor="salary" className="form-label">Salary</label>

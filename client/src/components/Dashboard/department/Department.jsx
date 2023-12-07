@@ -3,6 +3,7 @@ import './Department.css'
 import { Link } from 'react-router-dom'
 import { useState,useEffect } from 'react';
 import axios from 'axios'
+import EmployeeCountByDepartment from '../../common/EmpCountByDept/EmployeeCountByDepartment';
 
 function Department() {
   const [depdetails,setDepDetails] = useState([])
@@ -27,63 +28,53 @@ function Department() {
 
   return (
     <div className='custom-department-container'>
-      <div className='custom-department-header d-flex justify-content-between px-4 py-2'>
-        <h4 className='m-1'>Departments</h4>
-        <Link to='/home/add-department' className='custom-depatment-header-adddepartment cur-po rounded-2 my-auto p-1 text-decoration-none'>
+      <div className='bg-dark d-flex justify-content-between px-4 py-2'>
+        <h4 className='m-1 text-white'>Departments</h4>
+        <Link to='/home/add-department' className='btn btn-success cur-po rounded-2 my-auto p-1 text-decoration-none'>
           Add Department
         </Link>
       </div>
-      <div className="custom-department-details">
-        <ul className='custom-department-ul-head mt-2 p-0'>
-          <li className='d-flex py-2'>
-            <div className='abs-center col-1 pt-1'>
-              <h5>Dept Id</h5>        
-            </div>
-            <div className='abs-center col-2 pt-1'>
-              <h5>Department</h5>        
-            </div>
-            <div className='abs-center col-1 pt-1'>
-              <h5>No of employees</h5>        
-            </div>
-            <div className='col-5 abs-center'>
-              <h5>Description</h5>
-            </div>
-            <div className='col-1 abs-center'>
-              <h5>Designations</h5>
-            </div>
-            <div className='col-2 abs-center'>
-              <h5>Actions</h5> 
-            </div>
-          </li>
-        </ul>  
-        <ul className='custom-department-ul-list p-0'>
+      <table className="w-100 text-center table-bordered mt-3">
+        <thead style={{height: '60px', backgroundColor: 'var(--primary-color)'}}>
+          <tr className='text-white'>
+            <th>
+            Dept Id        
+            </th>
+            <th>
+            Department        
+            </th>
+            <th>
+            No of employees        
+            </th>
+            <th>
+            Description
+            </th>
+            <th>
+            Actions 
+            </th>
+          </tr>
+        </thead>  
+        <tbody style={{backgroundColor: 'var(--secondary-color)'}}>
         {depdetails.map((e)=>(
-          <li key={e._id} className='d-flex py-2 border-top border-dark border-1'>
-            <div className='abs-center col-1 pt-1 overflow-hidden'>
-              <div>{e._id}</div>        
-            </div>
-            <div className='abs-center col-2 pt-1'>
-              <div>{e.depName}</div>        
-            </div>
-            <div className='abs-center col-1 pt-1'>
-              <h6>No of employees</h6>        
-            </div>
-            <div className='col-5 abs-center'>
+          <tr key={e._id}>
+            <td>{e._id}</td>
+            <td>{e.depName}</td>        
+            <td>
+              <EmployeeCountByDepartment departmentName={e.depName} />        
+            </td>
+            <td>
               {e.depDes}
-            </div>
-            <div className='col-1 abs-center'>
-              {e.designation}
-            </div>
-            <div className='col-2 abs-center'>
+            </td>
+            <td className='py-2'>
               <Link to={`/home/edit-department/${e._id}`} className='p-2'>
-                <button className='btn custom-add-dept-edit-btn'>Edit</button>
+                <button className='btn btn-warning'>Edit</button>
               </Link>
-              <button className='btn custom-add-dept-delete-btn' onClick={(elem)=>handleDelete(e._id)}>Delete</button>
-            </div>
-          </li>
+              <button className='btn btn-danger' onClick={(elem)=>handleDelete(e._id)}>Delete</button>
+            </td>
+          </tr>
           ))}
-        </ul>
-      </div>
+        </tbody>
+      </table>
     </div>
   )
 }

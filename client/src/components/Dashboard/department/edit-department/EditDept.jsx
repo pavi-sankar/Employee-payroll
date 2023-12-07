@@ -8,7 +8,6 @@ function EditDept() {
 
     const [departmentName, setDepartmentName] = useState('');
     const [description, setDescription] = useState('');
-    const [designation, setDesignation] = useState('');
     const {id} = useParams();
 
     useEffect(() => {
@@ -16,14 +15,13 @@ function EditDept() {
           .then(response => {
             setDepartmentName(response.data.depName || '');
             setDescription(response.data.depDes|| '');
-            setDesignation(response.data.designation || '');
           })
           .catch(error => console.error('Error fetching user data:', error));
       }, []);
   
     const handleSubmit = (e) => {
       e.preventDefault();
-      if (!departmentName || !description || !designation) {
+      if (!departmentName || !description ) {
           alert('Please fill in all fields.');
           return;
       }
@@ -31,7 +29,6 @@ function EditDept() {
         axios.put(`http://localhost:3000/edit-dept/${id}`, {
           depName: departmentName,
           depDes: description,
-          designation: designation,
         })
           .then(result => {
             console.log(result.data);
@@ -39,7 +36,6 @@ function EditDept() {
             window.location.reload();
             setDepartmentName('');
             setDescription('');
-            setDesignation('');
           })
           .catch(err => {
             console.error(err);
@@ -50,7 +46,6 @@ function EditDept() {
     const handleClear = () => {
       setDepartmentName('');
       setDescription('')
-      setDesignation('') 
     };
   
     const handleCancel = () => {
@@ -87,19 +82,6 @@ function EditDept() {
                   name="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-              />
-              </div>
-              <div className="mb-5">
-              <label htmlFor="designation" className="form-label">
-                  Designation:
-              </label>
-              <input
-                  type="text"
-                  className="form-control"
-                  id="designation"
-                  name="designation"
-                  value={designation}
-                  onChange={(e) => setDesignation(e.target.value)}
               />
               </div>
               <div className='d-flex justify-content-around w-25'>
