@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router-dom'
 
 function MarkAttendance() {
 
-    const [employeeName, setEmployeeName] = useState('')
-    const [empDetails, setEmpDetails] = useState([''])
+    const [empId, setEmpId] = useState('all')
+    const [empDetails, setEmpDetails] = useState([])
     const [doa, setDOA] = useState('')
-    const [attendanceStatus, setAttendanceStatus] = useState('present');
+    const [attendanceStatus, setAttendanceStatus] = useState("present");
+    const [responseMessage, setResponseMessage] = useState('');
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -18,15 +19,66 @@ function MarkAttendance() {
           .catch(err => console.log(err));
       }, []);
 
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if(!doa){
+            setResponseMessage("please select date");
+            return;
+        }
+        axios.post('http://localhost:3000/markAttendance', {
+          employeeId: empId,
+          date: doa,
+          status: attendanceStatus,
+        })
+        .then((response) => {
+          setResponseMessage(response.data.message);
+          clearForm();
+          setTimeout(() => {
+            setResponseMessage('');
+          }, 3000);
+        })
+        .catch((error) => {
+          setResponseMessage('Error marking attendance. Please try again.');
+          setTimeout(() => {
+            setResponseMessage('');
+          }, 3000);
+        });
+      };      
+
     const clearForm = () => {
-        setEmployeeName('');
+        setEmpId('all');
         setDOA('');
-        setAttendanceStatus('');
+        setAttendanceStatus('present');
     };    
 
     const handleCancel = () => {
        navigate("/home/attendance")
-    };  
+    };
+    
+    const handleHoliday = (e) => {
+        setAttendanceStatus(e.target.value)
+        if(e.target.value=='holiday'){
+            setEmpId('all')
+        }
+    }
+
+    const handleEmp = (e) => {
+        setEmpId(e.target.value)
+        if(e.target.value!='all'){
+            setAttendanceStatus("present")
+        }
+    }
+
+    const handleDate = (e) => {
+        const selectedDate = e.target.value;
+        const currentDate = new Date().toISOString().split('T')[0]; // Get the current date in 'YYYY-MM-DD' format
+      
+        if (selectedDate > currentDate) {
+          alert("Please select a current or past date.");
+        } else {
+            setDOA(selectedDate);
+        }
+      };
 
   return (
     <div>
@@ -34,26 +86,26 @@ function MarkAttendance() {
             <h3 className='m-2'>Mark Attendance</h3>
         </div>
         <div className="bg-secondary mt-3 text-white">
-            <form className='d-flex p-5 justify-content-between'>
+            <form className='d-flex p-5 justify-content-between' onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label htmlFor="employeeName" className="form-label">Employee Name</label>
-                    <select className="form-select" id="Emp-name" value={employeeName} onChange={(e) => setEmployeeName(e.target.value)}>
-                        <option value="">Select Employee</option>
-                        {empDetails.map(Emp => (
-                        <option key={Emp._id} value={Emp.employeeName}>{Emp.employeeName}</option>
+                    <label htmlFor="empId" className="form-label">Employee Name</label>
+                    <select className="form-select" id="Emp-name" value={empId} onChange={handleEmp}>
+                        <option value='all'>All Employees</option>
+                        {empDetails.map(emp => (
+                        <option key={emp._id} value={emp._id}>{emp.employeeName}, {`(${emp.department})`}</option>
                         ))}
                     </select>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="Attendance-date" className="form-label">Date :</label>
-                    <input type="date" className="form-control" id="date-attendance" value={doa} onChange={(e) => setDOA(e.target.value)} />
+                    <input type="date" className="form-control" id="date-attendance" value={doa} onChange={handleDate} />
                 </div>
                 <div className="mb-3">
                     <label htmlFor='attendance-status' className='form-label'>Select Attendance Status:</label>
                     <select
                         value={attendanceStatus}
                         className='form-select'
-                        onChange={(e) => setAttendanceStatus(e.target.value)}>
+                        onChange={handleHoliday}>
                         <option value="present">Present</option>
                         <option value="absent">Absent</option>
                         <option value="holiday">Holiday</option>
@@ -65,6 +117,11 @@ function MarkAttendance() {
                     <button type="button" className="btn btn-danger ms-2" onClick={handleCancel}>Cancel</button>
                 </div>
             </form>
+            {responseMessage && (
+                <div className="alert alert-info" role="alert">
+                {responseMessage}
+                </div>
+            )}
         </div>
     </div>
   )

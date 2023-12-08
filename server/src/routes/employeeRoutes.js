@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const EmpModel = require('../models/Emp');
+const Attendance = require('../models/Attendance');
 
 // to get all emp details
 router.get('/getEmpDetails',async(req,res)=>{
@@ -57,6 +58,9 @@ router.delete('/deleteEmp/:id', async (req, res) => {
       if (!deletedEmp) {
         return res.status(404).json({ error: 'Employee not found' });
       }
+
+      //also delete coresponding Attendance log 
+      await Attendance.deleteMany({ employeeId: id });
   
       res.json({ message: 'Employee deleted successfully', deletedEmp });
     } catch (err) {
@@ -74,21 +78,33 @@ router.get('/getEditEmp/:id',(req,res)=>{
 
 //update Emp
 router.put('/putEmployee/:id', async (req, res) => {
-    const id = req.params.id;
-    try {
-        const updateEmp = await EmpModel.findByIdAndUpdate(id ,{
-            employeeName: req.body.employeeName,
-            dob: req.body.dob,
-            contact: req.body.contact,
-            department: req.body.department,
-            jobTitle: req.body.jobTitle,
-            salary: req.body.salary
-        }, { new: true });
-  
-        res.json(updateEmp);
-    } catch (err) {
-        res.json({ error: err.message });
-    }
+  const id = req.params.id;
+  try {
+    const oldEmployee = await Attendance.find({ employeeId: id }); 
+    const oldEmployeeNames = oldEmployee.map(emp => emp.employeeName);
+    const oldDepartmentName = oldEmployee.map(emp => emp.department);
+
+    const updateEmp = await EmpModel.findByIdAndUpdate(id, {
+      employeeName: req.body.employeeName,
+      dob: req.body.dob,
+      contact: req.body.contact,
+      department: req.body.department,
+      jobTitle: req.body.jobTitle,
+      salary: req.body.salary
+    }, { new: true });
+
+    await Attendance.updateMany({ employeeName: { $in: oldEmployeeNames } }, {
+      $set: { employeeName: req.body.employeeName },
+    });
+
+    await Attendance.updateMany({ department: {$in: oldDepartmentName} }, {
+      $set: { department: req.body.department},
+    });
+
+    res.json(updateEmp);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
 });
 
 //to get no of emp documents
@@ -102,6 +118,7 @@ router.get('/employeeCount', async (req, res) => {
   }
 });
 
+//to get get no of employees in specific department
 router.get('/api/employeeCount/:departmentName', async (req, res) => {
   const departmentName = req.params.departmentName;
 

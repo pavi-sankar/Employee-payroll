@@ -16,14 +16,18 @@ function Department() {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:3000/deleteDept/${id}`)
-      .then(res => {
-        console.log(res.data); 
-        window.location.reload();
-      })
-      .catch(err => {
-        console.error(`Error deleting department with ID ${id}:`, err.response?.data || err.message);
-      });
+    const shouldDelete = window.confirm('Are you sure you want to delete this department?');
+  
+    if (shouldDelete) {
+      axios.delete(`http://localhost:3000/deleteDept/${id}`)
+        .then(res => {
+          console.log(res.data);
+          window.location.reload();
+        })
+        .catch(err => {
+          console.error(`Error deleting department with ID ${id}:`, err.response?.data || err.message);
+        });
+    }
   };
 
   return (
