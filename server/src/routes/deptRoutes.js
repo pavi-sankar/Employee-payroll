@@ -2,6 +2,7 @@ const express = require('express');
 const deptModel = require('../models/Department');
 const EmpModel= require('../models/Emp');
 const Attendance= require('../models/Attendance');
+const PayrollModel = require('../models/Payroll');
 
 const router = express.Router();
 
@@ -79,6 +80,11 @@ router.put('/edit-dept/:id', async (req, res) => {
 
     // Update corresponding Attendance
     await Attendance.updateMany({ department: oldDepName }, {
+      $set: { department: newDepName },
+    });
+
+    //update corresponding payroll
+    await PayrollModel.updateMany({ department: oldDepName }, {
       $set: { department: newDepName },
     });
 

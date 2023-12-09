@@ -92,7 +92,7 @@ function Attendance() {
               </label>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary mt-2">Apply Filters</button>
+          <button className="btn btn-secondary mt-2" onClick={(e)=> window.location.reload()}>clear</button>
         </form>
         <table className="w-100 table-bordered text-center border-danger">
           <thead>

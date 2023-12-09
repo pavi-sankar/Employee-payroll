@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const EmpModel = require('../models/Emp');
 const Attendance = require('../models/Attendance');
+const PayrollModel =require('../models/Payroll')
 
 // to get all emp details
 router.get('/getEmpDetails',async(req,res)=>{
@@ -93,13 +94,25 @@ router.put('/putEmployee/:id', async (req, res) => {
       salary: req.body.salary
     }, { new: true });
 
+    //update coresponding employeeName in Attendence
     await Attendance.updateMany({ employeeName: { $in: oldEmployeeNames } }, {
       $set: { employeeName: req.body.employeeName },
     });
 
+    //update corresponding deptname in Attendance
     await Attendance.updateMany({ department: {$in: oldDepartmentName} }, {
       $set: { department: req.body.department},
     });
+
+    //update corresponding employee in payroll
+    await PayrollModel.updateMany({ employeeId: id }, {
+      $set: {
+        employeeName: req.body.employeeName,
+        department: req.body.department,
+        // Add other fields you want to update in payroll
+      },
+    });
+    
 
     res.json(updateEmp);
   } catch (err) {

@@ -79,7 +79,7 @@ function AddEmployee() {
         </div>
         <div className="mb-3">
           <label htmlFor="contact" className="form-label">Contact</label>
-          <input type="text" className="form-control" id="contact" value={contact} onChange={(e) => setContact(e.target.value)} />
+          <input type="text" className="form-control" id="contact" maxLength={10} value={contact} onChange={(e) => setContact(e.target.value)} />
         </div>
         <div className="mb-3">
           <label htmlFor="department" className="form-label">Department</label>

@@ -15,6 +15,7 @@ import AddEmployee from './components/Dashboard/employee/add-employee/AddEmploye
 import EditDept from './components/Dashboard/department/edit-department/EditDept';
 import EditEmployee from './components/Dashboard/employee/edit-employee/EditEmployee';
 import MarkAttendance from './components/Dashboard/attendance/mark-attendance/MarkAttendance';
+import PayrollLog from './components/Dashboard/payroll/PayrollLog';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
             <Route path='/home/edit-department/:id' element={<EditDept />} />
             <Route path='/home/edit-employee/:id' element={<EditEmployee />} />
             <Route path='/home/mark-attendance' element={<MarkAttendance />} />
+            <Route path='/home/payrollLog' element={<PayrollLog />} />
           </Route>  
         </Routes>
       </BrowserRouter>

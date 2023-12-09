@@ -13,7 +13,7 @@ function Payroll() {
 
   useEffect(() => {
     axios.get("http://localhost:3000/getEmpDetails")
-      .then(result => {setEmpDetails(result.data)
+      .then(resp => {setEmpDetails(resp.data)
       })
       .catch(err => console.log(err));
   }, []);
@@ -25,6 +25,27 @@ function Payroll() {
       setResult(response.data);
     } catch (error) {
       console.error('Error calculating salary:', error.response?.data || error.message);
+    }
+  };
+
+  const handlePaySalary = async () => {
+    try {
+      const res = await axios.post('http://localhost:3000/createPayroll', {
+        employeeId: result.empDetails._id,
+        employeeName: result.empDetails.employeeName,
+        department: result.empDetails.department,
+        month: result.month,
+        year: result.year,
+        salary: result.empDetails.salary,
+        paidSalary: result.calculatedSalary,
+        absentDays: result.absentDays,
+        paidDate: new Date(),
+      });
+      alert('Payroll created:', + res.data);
+      window.location.reload();
+    } catch (error) {
+      alert('Error creating payroll: ' + JSON.stringify(error.response?.data || error.message));
+      window.location.reload();
     }
   };
 
@@ -42,7 +63,7 @@ function Payroll() {
     <div className='p-0'>
       <div className='bg-dark d-flex justify-content-between px-4 py-2'>
         <h4 className='m-1 text-white'>payroll</h4>
-        <Link to='#' className='btn btn-success cur-po rounded-2 my-auto p-1 text-decoration-none'>
+        <Link to='/home/payrollLog' className='btn btn-success cur-po rounded-2 my-auto p-1 text-decoration-none'>
           Payroll History
         </Link>
       </div>
@@ -83,7 +104,7 @@ function Payroll() {
             </div>
             <div className='m-4 ps-5'>
               <button type='submit' className="btn btn-primary">Submit</button>
-              <button className="btn btn-secondary ms-4">Clear</button>
+              <button className="btn btn-secondary ms-4" onClick={(e)=>setEmployeeId('')}>Clear</button>
             </div>
             <div className='m-2 p-1'>
               <h4 className='text-decoration-underline'>salary slab</h4>
@@ -103,10 +124,12 @@ function Payroll() {
               <h5>Job: {result.empDetails.jobTitle}</h5>
               <h5>Salary: ${result.empDetails.salary}</h5>
               <h5>Absent Days: {result.absentDays}</h5>
+              <h5>Month&Year : {result.month}/{result.year}</h5>
               <h5>Calculated Salary: ${result.calculatedSalary}</h5>
             </div>
             <div className='mx-auto my-auto'>
-              <button className="btn btn-primary">Pay {result.calculatedSalary}</button>
+              <button onClick={handlePaySalary} className="btn btn-primary">Pay {result.calculatedSalary}</button>
+              <button className="btn btn-danger ms-2" onClick={(e)=>{window.location.reload();}}>Cancel</button>
             </div>
           </div>
         )}

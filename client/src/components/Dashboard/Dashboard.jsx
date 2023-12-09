@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [employeeCount, setEmployeeCount] = useState(null);
   const [attendanceCount,setAttendanceCount] = useState(null);
+  const [totalPaidSalary, setTotalPaidSalary] = useState(null);
   const [deptCount, setDeptCount] = useState('')
 
   useEffect(() => {
@@ -34,13 +35,16 @@ const Dashboard = () => {
         const count = res.data.count;
         setDeptCount(count);
       })
-      .catch(error => console.error('Error fetching department count', error));
+      .catch(err => console.err('Error fetching department count', err));
       axios.get(`http://localhost:3000/getCurrentAttendance`)
       .then(respon => {
         const count = respon.data.count;
         setAttendanceCount(count);
       })
       .catch(error => console.error('Error fetching employee count', error));
+      axios.get(`http://localhost:3000/totalPaidSalaryCurrentMonth`)
+      .then(results => {setTotalPaidSalary(results.data.totalPaidSalary);})
+      .catch(errors => console.errors('error fetching paid salary',errors));
   }, []);
 
 
@@ -59,8 +63,11 @@ const Dashboard = () => {
           )}
         </Link>
         <Link to={`/home/payroll`} className="card custom-dashbord-card p-2 text-center">
-          <h3>Salary pending</h3>
-          <p>$500,000</p>
+          {totalPaidSalary !== null ? (
+              <div><h4>salary paid</h4><h2>{totalPaidSalary}</h2></div>
+            ) : (
+              <h4>Loading...</h4>
+            )}
         </Link>
         <Link to={`/home/department`} className="card custom-dashbord-card p-2 text-center">
         {deptCount !== null ? (
